@@ -13,7 +13,7 @@ public class KN {
     public static void main(String[] args) {
         int maxKinds = 100;
         int range = 200;
-        int testTime = 100000;
+        int testTime = 10000;
         int timesMax = 100;
         for (int i = 0; i < testTime; i++) {
             int a = (int) (Math.random() * timesMax) + 1;
@@ -51,6 +51,12 @@ public class KN {
             for (int i1 = 0; i1 < n; i1++) {
                 arr[cur++] = nTimesNumber;
             }
+        }
+
+        // 打乱数组
+        for (int i = 0; i < arr.length; i++) {
+            int randomN = (int) (Math.random() * arr.length);
+            CommonMethod.swapIntegerArray(arr, i, randomN);
         }
         return arr;
     }
