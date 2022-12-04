@@ -1,5 +1,7 @@
 package com.maccoy.algorithm;
 
+import java.util.*;
+
 /**
  * @author Maccoy
  * @date 2022/12/5
@@ -8,34 +10,74 @@ package com.maccoy.algorithm;
  */
 public class KN {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public static void main(String[] args) {
-        int[] test = new int[]{
-                5, 5, 5, 5, 5, 5,
-                7, 7, 7, 7, 7, 7,
-                8, 8, 8, 8, 8, 8,
-                1,
-        };
-        System.out.println(onlyKTimes(test, 1, 6));
+        int maxKinds = 100;
+        int range = 200;
+        int testTime = 100000;
+        int timesMax = 100;
+        for (int i = 0; i < testTime; i++) {
+            int a = (int) (Math.random() * timesMax) + 1;
+            int b = (int) (Math.random() * timesMax) + 1;
+            int k = Math.min(a, b);
+            int n = Math.max(a, b);
+            if (k == n) {
+                n++;
+            }
+            int[] arr = randomArray(maxKinds, range, k, n);
+            int ans_1 = test(arr, k, n);
+            int ans_2 = onlyKTimes(arr, k, n);
+            if (ans_1 != ans_2) {
+                System.err.println("error! array: " + Arrays.toString(arr));
+            }
+        }
+    }
+
+    public static int[] randomArray(int maxKinds, int range, int k, int n) {
+        int kTimesNumber = randomNumber(range);
+        int numberKinds = (int) (Math.random() * maxKinds) + 2;
+        int[] arr = new int[(numberKinds - 1) * n + k];
+        int cur = 0;
+        for (int i = 0; i < k; i++) {
+            arr[cur++] = kTimesNumber;
+        }
+
+        Set<Integer> containsSet = new HashSet<>();
+        containsSet.add(kTimesNumber);
+        for (int i = 0; i < numberKinds - 1; i++) {
+            int nTimesNumber = 0;
+            do {
+                nTimesNumber = randomNumber(range);
+            } while (containsSet.contains(nTimesNumber));
+            for (int i1 = 0; i1 < n; i1++) {
+                arr[cur++] = nTimesNumber;
+            }
+        }
+        return arr;
+    }
+
+    /**
+     * [-range, +range]
+     */
+    public static int randomNumber(int range) {
+        return ((int) (Math.random() * range) + 1) - ((int) (Math.random() * range) + 1);
+    }
+
+    public static int test(int[] arr, int k, int n) {
+        Map<Integer, Integer> container = new HashMap<>();
+        for (int i : arr) {
+            if (container.containsKey(i)) {
+                container.put(i, container.get(i) + 1);
+            } else {
+                container.put(i, 1);
+            }
+        }
+
+        for (Map.Entry<Integer, Integer> integerIntegerEntry : container.entrySet()) {
+            if (integerIntegerEntry.getValue().equals(k)) {
+                return integerIntegerEntry.getKey();
+            }
+        }
+        return -1;
     }
 
     public static int onlyKTimes(int[] arr, int k, int n) {
